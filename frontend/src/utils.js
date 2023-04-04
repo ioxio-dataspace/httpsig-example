@@ -20,3 +20,16 @@ export async function getUser() {
   }
   return await resp.json()
 }
+
+export async function fetchDataProductWithHTTPSig(definition, params) {
+  // In this application we use data products that are published under
+  //  "ioxio" source only
+  const resp = await fetch(`/api/data-product-sig/${definition}?source=ioxio`, {
+    method: "POST",
+    body: JSON.stringify(params),
+  })
+  if (!resp.ok) {
+    throw new Error("Failed to fetch a data product")
+  }
+  return await resp.json()
+}

@@ -58,6 +58,13 @@ Before running the app locally, you have to:
 - [pre-commit](https://pre-commit.com/) - Runs hooks before you commit to e.g. format
   your code. Make sure you run `pre-commit install` after checking out the repo.
 
+### RSA keys
+
+Before bootstrapping the project you need to
+[generate RSA keys](https://cryptotools.net/rsagen) and add them as `PRIVATE_KEY` to
+`.env` in backend and productizer folders. Those keys are used for HTTP Message
+Signatures.
+
 ### Backend
 
 ```bash
@@ -65,6 +72,18 @@ cd backend
 poetry install
 
 poetry run dev
+```
+
+NOTE! It's important that backend is running with 2 workers because during ongoing
+request productizer will try to access backend's JWKs.
+
+### Productizer
+
+```bash
+cd backend
+poetry install
+
+poetry run flask --app app.main run --debug
 ```
 
 ### Frontend

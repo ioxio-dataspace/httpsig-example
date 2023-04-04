@@ -1,12 +1,14 @@
 import React from "react"
 import CurrentWeather from "./CurrentWeather"
 import PersonDetails from "./PersonDetails"
+import HTTPSig from "./HTTPSig"
 
 function App() {
   return (
     <div className="app">
       <CurrentWeather />
-      <PersonDetails />
+      <HTTPSig />
+      {/*<PersonDetails />*/}
     </div>
   )
 }
