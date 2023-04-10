@@ -182,8 +182,7 @@ async def signed_fetch_data_product(
     if id_token:
         headers["authorization"] = f"Bearer {id_token}"
 
-    # TODO: use product gateway there instead of direct productizer
-    url = f"http://127.0.0.1:5000/{data_product}"
+    url = f"{conf.PRODUCT_GATEWAY_URL}/{data_product}"
 
     session = requests.session()
     request = requests.Request(

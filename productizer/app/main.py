@@ -13,12 +13,12 @@ app = Flask(__name__)
 
 
 @app.get("/.well-known/jwks.json")
-def jwks():
+def get_jwks():
     return {"keys": [conf.PRIVATE_KEY.jwk]}
 
 
 @app.post("/draft/Weather/Current/Metric")
-def hello_world():
+def get_weather():
     verify_content_digest(request.headers, request.json)
     http_sig_verifier.verify(request)
     data = {
@@ -27,6 +27,7 @@ def hello_world():
         "rain": False,
         "temp": 1.4600000000000364,
         "windSpeed": 6.71,
+        "windDirection": 1,
     }
     body = json.dumps(data).encode("utf8")
     resp = Response(response=body, status=200, mimetype="application/json", headers={})
