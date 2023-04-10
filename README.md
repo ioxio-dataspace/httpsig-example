@@ -58,13 +58,6 @@ Before running the app locally, you have to:
 - [pre-commit](https://pre-commit.com/) - Runs hooks before you commit to e.g. format
   your code. Make sure you run `pre-commit install` after checking out the repo.
 
-### RSA keys
-
-Before bootstrapping the project you need to
-[generate RSA keys](https://cryptotools.net/rsagen) and add them as `PRIVATE_KEY` to
-`.env` in backend and productizer folders. Those keys are used for HTTP Message
-Signatures.
-
 ### Backend
 
 ```bash
@@ -96,3 +89,19 @@ pnpm dev
 ```
 
 Then open http://localhost:3000 in your browser.
+
+### Testing HTTP Message Signatures locally
+
+#### RSA keys
+
+Before running backend and productizer you need to
+[generate RSA keys](https://cryptotools.net/rsagen) and add them as `PRIVATE_KEY` to
+`.env` in backend and productizer folders. Those keys are used for HTTP Message
+Signatures.
+
+#### Product Gateway
+
+In order to request `draft/Weather/Current/Metric` from local environment you need to
+run product gateway from `httpsig` branch and set
+`PRODUCT_GATEWAY_URL=http://127.0.0.1:8000` in `backend/.env`. Please also follow the
+instructions in Product Gateway README.
