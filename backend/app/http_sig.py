@@ -31,6 +31,9 @@ class AppKeyResolver(HTTPSignatureKeyResolver):
         return self.keys[key_id].key
 
     def resolve_public_key(self, key_id: str):
+        print(
+            f"Resolving public RSA key ({key_id}) from {conf.HTTP_SIG_VERIFY_JWKS_URI}"
+        )
         return jwks_client.get_signing_key(key_id).key
 
 
@@ -44,12 +47,10 @@ def verify_content_digest(headers, body):
         content_digest = headers["Content-Digest"]
     except KeyError:
         raise MissingContentDigest
-    # digest_alg = content_digest.split("=")[0]
     incoming_digest = content_digest.split(":")[1]
     body_bytes = bytes(json.dumps(body), "utf8")
 
     calc_digest_bytes = hashlib.sha256(body_bytes).digest()
-    # where \n in the end is coming from?
     calculated_digest = base64.encodebytes(calc_digest_bytes).decode("utf8")[:-1]
     if incoming_digest != calculated_digest:
         raise ContentDigestMismatch
@@ -64,3 +65,10 @@ http_sig_signer = HTTPMessageSigner(
     signature_algorithm=algorithms.RSA_V1_5_SHA256,
     key_resolver=key_resolver,
 )
+
+
+def make_short_signature(headers):
+    """
+    Return a short version of Signature for logging purposes
+    """
+    return headers["Signature"].split(":")[1][:6] + ".."

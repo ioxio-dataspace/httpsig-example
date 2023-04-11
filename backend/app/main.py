@@ -7,6 +7,7 @@ from app.http_sig import (
     http_sig_signer,
     http_sig_verifier,
     inject_digest,
+    make_short_signature,
     verify_content_digest,
 )
 from app.well_known import router as well_known_router
@@ -201,13 +202,18 @@ async def signed_fetch_data_product(
         key_id=conf.PRIVATE_KEY.kid,
         covered_component_ids=("@method", "content-digest"),
     )
-
+    req_sig = make_short_signature(request.headers)
+    print(f"Requesting {data_product} from {source} with signature {req_sig}")
     resp = session.send(request)
+    resp_sig = make_short_signature(resp.headers)
+    print(f"Received response with signature {resp_sig}")
 
     # HTTP MESSAGE SIGNATURE VERIFICATION
     resp_json = resp.json()
     verify_content_digest(resp.headers, resp_json)
+    print("Content digest is verified")
     http_sig_verifier.verify(resp)
+    print(f"Signature {resp_sig} for {source} is verified")
 
     return JSONResponse(resp.json(), resp.status_code)
 
