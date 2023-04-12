@@ -2,7 +2,9 @@
 
 This demo application is designed to show a practical example on how to create an
 application and a productizer that connect to a Dataspace built with the IOXIO Dataspace
-technology and implement HTTP Message Signatures for data verification.
+technology and implement
+[HTTP Message Signatures](https://httpwg.org/http-extensions/draft-ietf-httpbis-message-signatures.html)
+for data verification.
 
 This repository contains 3 applications:
 
