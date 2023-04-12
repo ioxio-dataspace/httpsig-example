@@ -111,3 +111,7 @@ By default services are running at the following ports:
 - Productizer at http://localhost:5000
 
 Here's an example of the output when all the services are set up properly:
+
+![Request from the app](./docs/request.png)
+
+![Response from productizer](./docs/request.png)
