@@ -1,20 +1,23 @@
-# IOXIO Dataspace example app
+# IOXIO Dataspace Message Signatures example
 
 This demo application is designed to show a practical example on how to create an
-application that connects to a Dataspace built with the IOXIO Dataspace technology.
+application and a productizer that connect to a Dataspace built with the IOXIO Dataspace
+technology and implement HTTP Message Signatures for data verification.
 
-It consists of a simple Python [FastAPI](https://fastapi.tiangolo.com) backend that is
-responsible for authentication and data retrieval and React-based frontend application.
+This repository contains 3 applications:
 
-You can try the [online demo](https://example-app.demos.ioxio.dev) or check the
-[configuration](#configuration) section for instructions on how to run this code
-locally.
+- Python [FastAPI](https://fastapi.tiangolo.com) backend that is responsible for
+  authentication and requesting data from data sources
+- [React](https://react.dev/)-based frontend application.
+- Python [Flask](https://flask.palletsprojects.com) productizer that acts as a data
+  source and returns fake weather data
 
 Main idea is to demonstrate how to:
 
 - Retrieve data products from Product Gateway
-- Perform authentication in a dataspace
-- Use the authentication tokens for data products
+- Implement a productizer
+- Sign and verify each request from an app to a productizer and from a productizer to an
+  application
 
 ## Repo structure
 
@@ -22,12 +25,16 @@ Main idea is to demonstrate how to:
   - [main.py](./backend/app/main.py) - All the backend routes, e.g. for authentication
     or data retrieval
   - [settings.py](./backend/app/settings.py) - Backend configuration
+  - [http_sig.py](./backend/app/http_sig.py) - Helpers for HTTP Message Signatures
 - [frontend](./frontend) - React application
   - [containers](./frontend/src/containers) - Root containers for handling data products
   - [components](./frontend/src/components) - Stateless components to simplify following
     the containers' logic
   - [utils](./frontend/src/utils) - Some helpers, e.g. for making network requests to
     the backend
+- [productizer](./productizer) - Productizer implementation
+  - [main.py](./productizer/app/main.py) - Weather route
+  - [http_sig.py](./productizer/app/http_sig.py) - Helpers for HTTP Message Signatures
 
 ## Local installation
 
@@ -48,6 +55,13 @@ Before running the app locally, you have to:
 2. Create the [backend/.env](backend/.env) file based on
    [backend/.env.example](backend/.env.example) and set the variables with the values
    from the previous step.
+
+### RSA keys
+
+Before running backend and productizer you need to
+[generate RSA keys](https://cryptotools.net/rsagen) and add them as `PRIVATE_KEY` to
+`.env` in backend and productizer folders. Those keys are used for HTTP Message
+Signatures.
 
 ### Pre-requisites
 
@@ -88,20 +102,12 @@ pnpm install
 pnpm dev
 ```
 
-Then open http://localhost:3000 in your browser.
+## Message Signatures
 
-### Testing HTTP Message Signatures locally
+By default services are running at the following ports:
 
-#### RSA keys
+- Frontend at http://localhost:3000
+- Backend at http://localhost:8080
+- Productizer at http://localhost:5000
 
-Before running backend and productizer you need to
-[generate RSA keys](https://cryptotools.net/rsagen) and add them as `PRIVATE_KEY` to
-`.env` in backend and productizer folders. Those keys are used for HTTP Message
-Signatures.
-
-#### Product Gateway
-
-In order to request `draft/Weather/Current/Metric` from local environment you need to
-run product gateway from `httpsig` branch and set
-`PRODUCT_GATEWAY_URL=http://127.0.0.1:8000` in `backend/.env`. Please also follow the
-instructions in Product Gateway README.
+Here's an example of the output when all the services are set up properly:
