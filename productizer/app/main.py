@@ -25,7 +25,7 @@ def get_weather():
     print(
         f"Received request for /draft/Weather/Current/Metric with signature {req_sig}"
     )
-    verify_content_digest(request.headers, request.json)
+    verify_content_digest(request.headers, request.data)
     print("Content digest is verified")
     http_sig_verifier.verify(request)
     print(f"Signature {req_sig} is verified")

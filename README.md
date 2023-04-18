@@ -89,7 +89,7 @@ request productizer will try to access backend's JWKs.
 ### Productizer
 
 ```bash
-cd backend
+cd productizer
 poetry install
 
 poetry run flask --app app.main run --debug
@@ -109,11 +109,15 @@ pnpm dev
 By default services are running at the following ports:
 
 - Frontend at http://localhost:3000
-- Backend at http://localhost:8080
+- Backend at http://localhost:8088
 - Productizer at http://localhost:5000
+
+Backend and productizer host their public keys at `<BASE_URL>/.well-known/jwks.json` and
+each service use this URL to verify HTTP Message Signatures. The URLs are set in
+`settings.py` of each service as `HTTP_SIG_VERIFY_JWKS_URI`.
 
 Here's an example of the output when all the services are set up properly:
 
 ![Request from the app](./docs/request.png)
 
-![Response from productizer](./docs/request.png)
+![Response from productizer](./docs/response.png)

@@ -209,8 +209,7 @@ async def signed_fetch_data_product(
     print(f"Received response with signature {resp_sig}")
 
     # HTTP MESSAGE SIGNATURE VERIFICATION
-    resp_json = resp.json()
-    verify_content_digest(resp.headers, resp_json)
+    verify_content_digest(resp.headers, resp.content)
     print("Content digest is verified")
     http_sig_verifier.verify(resp)
     print(f"Signature {resp_sig} for {source} is verified")
@@ -225,7 +224,7 @@ app.include_router(well_known_router, prefix="/.well-known")
 def main():
     import uvicorn
 
-    uvicorn.run("app.main:app", host="127.0.0.1", port=8080, workers=2)
+    uvicorn.run("app.main:app", host="127.0.0.1", port=8088, workers=2)
 
 
 if __name__ == "__main__":

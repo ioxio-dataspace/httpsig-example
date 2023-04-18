@@ -1,3 +1,5 @@
+import settings from "./settings"
+
 export async function fetchDataProduct(definition, params) {
   // In this application we use data products that are published under
   //  "ioxio" source only
@@ -22,9 +24,8 @@ export async function getUser() {
 }
 
 export async function fetchDataProductWithHTTPSig(definition, params) {
-  // In this application we use data products that are published under
-  //  "ioxio" source only
-  const resp = await fetch(`/api/data-product-sig/${definition}?source=ioxio`, {
+  const source = settings.HTTP_SIG_DATA_PRODUCT_SOURCE
+  const resp = await fetch(`/api/data-product-sig/${definition}?source=${source}`, {
     method: "POST",
     body: JSON.stringify(params),
   })

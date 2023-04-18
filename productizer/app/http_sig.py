@@ -1,6 +1,5 @@
 import base64
 import hashlib
-import json
 
 import http_sfv
 from app.settings import conf
@@ -42,15 +41,14 @@ def inject_digest(headers, body):
     headers["Content-Digest"] = str(digest)
 
 
-def verify_content_digest(headers, body):
+def verify_content_digest(headers, body: bytes):
     try:
         content_digest = headers["Content-Digest"]
     except KeyError:
         raise MissingContentDigest
     incoming_digest = content_digest.split(":")[1]
-    body_bytes = bytes(json.dumps(body), "utf8")
 
-    calc_digest_bytes = hashlib.sha256(body_bytes).digest()
+    calc_digest_bytes = hashlib.sha256(body).digest()
     calculated_digest = base64.encodebytes(calc_digest_bytes).decode("utf8")[:-1]
     if incoming_digest != calculated_digest:
         raise ContentDigestMismatch
@@ -71,4 +69,7 @@ def make_short_signature(headers):
     """
     Return a short version of Signature for logging purposes
     """
-    return headers["Signature"].split(":")[1][:6] + ".."
+    if "Signature" in headers:
+        return headers["Signature"].split(":")[1][:6] + ".."
+    else:
+        return "NO SIGNATURE"
