@@ -1,5 +1,6 @@
 import secrets
 
+from app.keys import RsaPrivateKey
 from pydantic import BaseSettings
 
 
@@ -31,6 +32,11 @@ class Settings(BaseSettings):
 
     # Base URL of the application
     BASE_URL: str = "http://localhost:3000"
+
+    # For creating HTTP Message Signatures
+    PRIVATE_KEY: RsaPrivateKey
+    # Where to load public keys to verify HTTP Message Signatures
+    HTTP_SIG_VERIFY_JWKS_URI: str = "http://127.0.0.1:5000/.well-known/jwks.json"
 
     class Config:
         env_file = ".env"
