@@ -19,12 +19,10 @@ def get_jwks():
     return {"keys": [conf.PRIVATE_KEY.jwk]}
 
 
-@app.post("/draft/Weather/Current/Metric")
+@app.post("/Weather/Current/Metric_v1.0")
 def get_weather():
     req_sig = make_short_signature(request.headers)
-    print(
-        f"Received request for /draft/Weather/Current/Metric with signature {req_sig}"
-    )
+    print(f"Received request for /Weather/Current/Metric_v1.0 with signature {req_sig}")
     verify_content_digest(request.headers, request.data)
     print("Content digest is verified")
     http_sig_verifier.verify(request)
